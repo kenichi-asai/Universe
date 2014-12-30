@@ -1,0 +1,5 @@
+SOURCES = color.ml
+PACKS = lablgtk2.gnomecanvas 
+RESULT = color
+OCAMLMAKEFILE = ../OCamlMakefile
+include $(OCAMLMAKEFILE)

@@ -1,0 +1,5 @@
+SOURCES = socket.mli socket.ml
+PACKS = unix
+RESULT = socket
+OCAMLMAKEFILE = ../OCamlMakefile
+include $(OCAMLMAKEFILE)

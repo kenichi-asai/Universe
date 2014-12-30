@@ -1,0 +1,6 @@
+SOURCES = universe.mli universe.ml
+PACKS = lablgtk2.gnomecanvas 
+LIBS = socket
+RESULT = universe
+OCAMLMAKEFILE = ../OCamlMakefile
+include $(OCAMLMAKEFILE)

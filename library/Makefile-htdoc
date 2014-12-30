@@ -1,0 +1,11 @@
+SOURCES = color.mli image.mli socket.mli world.mli universe.mli
+PACKS = lablgtk2.gnomecanvas 
+OCAMLDOCFLAGS = -charset utf-8 -t "OCaml Universe Library"
+RESULT = htdoc
+OCAMLMAKEFILE = ../OCamlMakefile
+include $(OCAMLMAKEFILE)
+
+# for htdoc with @en and @ja (called from htdoc in OCamlMakefile)
+$(DOC_DIR)/$(RESULT)/html/index.html: $(DOC_DIR)/$(RESULT)/html $(DOC_FILES)
+	rm -rf $</*
+	$(REAL_OCAMLFIND) $(OCAMLDOC) $(OCAML_FIND_PACKAGES) -g ocamldoc/custom.cmxs -d $< $(OCAMLDOCFLAGS) -passopt $(PASSOPTFLAGS) $(INCFLAGS) $(DOC_FILES)

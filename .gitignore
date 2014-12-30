@@ -1,0 +1,17 @@
+*.bak
+*.swp
+*~
+*.cmi
+*.cmo
+*.cma
+*.cmx
+*.cmxa
+*.o
+*.a
+._bcdi
+._ncdi
+._d
+.DS_Store
+._*
+\#*#
+.#*

@@ -1,0 +1,5 @@
+SOURCES = image.mli image.ml
+PACKS = lablgtk2.gnomecanvas 
+RESULT = image
+OCAMLMAKEFILE = ../OCamlMakefile
+include $(OCAMLMAKEFILE)
