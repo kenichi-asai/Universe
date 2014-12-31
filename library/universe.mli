@@ -1,5 +1,6 @@
 (**     Universe module 
-    @ja Universe モジュール *)
+    @ja Universe モジュール
+    @see <http://docs.racket-lang.org/teachpack/2htdpuniverse.html> Racket Documentation *)
 
 (** @en the type of clients
     @ja クライアントを表す型 *)

@@ -1,5 +1,6 @@
-(**     Image module 
-    @ja 画像モジュール *)
+(**     Image module
+    @ja 画像モジュール
+    @see <http://docs.racket-lang.org/teachpack/2htdpimage.html> Racket Documentation *)
 
 type t
 (** @en [Image.t] : the type of images 
@@ -20,7 +21,8 @@ val rectangle : int -> int -> Color.t -> t
 val polygon : (int * int) list -> Color.t -> t
 (** @en [polygon [(x, y);...] color] : creates a polygon with [color]
         connecting [(x, y)]'s
-    @ja [polygon [(x, y);...] color] : [(x, y)] を繋げた、色 [color] の多角形を         作る *)
+    @ja [polygon [(x, y);...] color] : [(x, y)] を繋げた、色 [color] の多角形を
+        作る *)
 
 val circle : int -> Color.t -> t
 (** @en [circle radius color] : creates a circle of [radius] with [color] 

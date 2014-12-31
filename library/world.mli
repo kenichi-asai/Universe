@@ -1,5 +1,6 @@
 (**     World module 
-    @ja World モジュール *)
+    @ja World モジュール
+    @see <http://docs.racket-lang.org/teachpack/2htdpuniverse.html> Racket Documentation *)
 
 type ('a, 'b) t =
     World of 'a (**     ['a] is the type of world states
