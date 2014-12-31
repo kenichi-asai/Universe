@@ -5,40 +5,48 @@ open Color
 (* 四角形 *)
 type gnorect = {
   color : Color.t;              (* 色 *)
-  x1 : int; y1 : int;           (* 左上の座標 *)
-  x2 : int; y2 : int;           (* 横幅、高さ *)
+  x1 : float; y1 : float;       (* 左上の座標 *)
+  x2 : float; y2 : float;       (* 横幅、高さ *)
+}
+
+(* 多角形 *)
+type gnopolygon = {
+  color : Color.t;              (* 色 *)
+  points : (int * int) list;    (* 点の座標のリスト *)
 }
 
 (* 円 *)
 type gnocircle = {
   color : Color.t;              (* 色 *)
-  x1 : int; y1 : int;           (* 中心の座標 *)
-  x2 : int; y2 : int;           (* 横幅、高さ *)
+  x1 : float; y1 : float;       (* 中心の座標 *)
+  x2 : float; y2 : float;       (* 横幅、高さ *)
 }
 
+(* 線 *)
 type gnoline = {
   color : Color.t;              (* 色 *)
-  points : int list;            (* 点の座標のリスト *)
+  points : (int * int) list;    (* 点の座標のリスト *)
 }
 
 (* テキスト *)
 type gnotext = {
   color : Color.t;              (* 色 *)
   text : string;                (* テキスト *)
-  x : int; y : int;             (* 左上の座標 *)
-  size : int;                   (* フォントのサイズ *)
+  x : float; y : float;         (* 左上の座標 *)
+  size : float;                 (* フォントのサイズ *)
 }
 
 (* 画像 *)
 type gnopixbuf = {
   pixbuf : GdkPixbuf.pixbuf;    (* 画像 *)
-  x : int; y : int;             (* 左上の座標 *)
-  width : int; height : int;    (* 横幅、高さ *)
+  x : float; y : float;         (* 左上の座標 *)
+  width : float; height : float;(* 横幅、高さ *)
 }
 
 type t = 
     RECT of gnorect
   | CIRCLE of gnocircle
+  | POLYGON of gnopolygon
   | LINE of gnoline
   | TEXT of gnotext
   | PIXBUF of gnopixbuf
@@ -46,45 +54,63 @@ type t =
 
 (* empty_scene : int -> int -> Image.t *)
 let empty_scene w h =
-  RECT {color = white; x1 = 0; y1 = 0; x2 = w; y2 = h}
+  RECT {color = white; x1 = 0.; y1 = 0.; 
+        x2 = (float_of_int w); y2 = (float_of_int h)}
   
 (* rectangle : int -> int -> Color.t -> Image.t *)
 let rectangle w h c =
-  RECT {color = c; x1 = 0; y1 = 0; x2 = w; y2 = h}
+  RECT {color = c; x1 = 0.; y1 = 0.; 
+        x2 = (float_of_int w); y2 = (float_of_int h)}
+
+(* polygon : (int * int) list -> Color.t -> Image.t *)
+let polygon lst c =  
+  POLYGON {color = c; points = lst}
 
 (* circle : int -> Color.t -> Image.t *)
 let circle radious c =
-  CIRCLE {color = c; x1 = 0; y1 = 0; x2 = 2 * radious; y2 = 2 * radious }
+  CIRCLE {color = c; x1 = 0.; y1 = 0.; 
+          x2 = float_of_int (2 * radious); 
+          y2 = float_of_int (2 * radious) }
 
-(* line : (int*int) list -> Color.t -> Image.t *)
+(* line : (int * int) list -> Color.t -> Image.t *)
 let line lst c =
-  let pointlst= List.flatten (List.map (fun (x,y) -> [x;y]) lst) in
-  LINE {color =c; points = pointlst}
+   LINE {color = c; points = lst}
 
 (* text : string -> int -> Color.t -> Image.t *)
 let text str tsize c =
-  TEXT {color = c; text = str; x = 0; y = 0; size = tsize}
+  TEXT {color = c; text = str; x = 0.; y = 0.; size = float_of_int tsize}
 
 (* read_image : string -> Image.t *)
 let read_image name = 
   let buf = GdkPixbuf.from_file name in
-  PIXBUF {pixbuf = buf; x = 0; y = 0;
-          width = GdkPixbuf.get_width buf;
-          height = GdkPixbuf.get_height buf}
+  PIXBUF {pixbuf = buf; x = 0.; y = 0.;
+          width = float_of_int (GdkPixbuf.get_width buf);
+          height = float_of_int (GdkPixbuf.get_height buf)}
 
 (* move_one *)
 let rec move_one dx dy pic = match pic with
     RECT {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
-      RECT {color = c; x1 = x + dx; y1 = y + dy; x2 = w; y2 = h}
+      let dx = float_of_int dx in
+      let dy = float_of_int dy in
+      RECT {color = c; x1 = x +. dx; y1 = y +. dy; x2 = w; y2 = h}
+  | POLYGON {color = c; points = lst} ->
+      let lst = List.map (fun (x, y) -> (x + dx, y + dy)) lst in
+      POLYGON {color = c; points = lst}
   | CIRCLE {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
-      CIRCLE {color = c; x1 = x + dx; y1 = y + dy; x2 = w; y2 = h}
+      let dx = float_of_int dx in
+      let dy = float_of_int dy in
+      CIRCLE {color = c; x1 = x +. dx; y1 = y +. dy; x2 = w; y2 = h}
   | LINE {color = c; points = lst} ->
+      let lst = List.map (fun (x, y) -> (x + dx, y + dy)) lst in
       LINE {color = c; points = lst}
-           (* 何もかわりません！ *)
   | TEXT {color = c; text = t; x = x; y = y; size = s} ->
-      TEXT {color = c; text = t; x = x + dx; y = y + dy; size = s}
+      let dx = float_of_int dx in
+      let dy = float_of_int dy in
+      TEXT {color = c; text = t; x = x +. dx; y = y +. dy; size = s}
   | PIXBUF {pixbuf = p; x = x; y = y; width = w; height = h} ->
-      PIXBUF {pixbuf = p; x = x + dx; y = y + dy; width = w; height = h}
+      let dx = float_of_int dx in
+      let dy = float_of_int dy in
+      PIXBUF {pixbuf = p; x = x +. dx; y = y +. dy; width = w; height = h}
   | IMAGE lst -> IMAGE (List.map (move_one dx dy) lst)
 
 (* place_images : Image.t list -> (int * int) list -> Image.t -> Image.t *)
@@ -114,33 +140,40 @@ let rec rev_iter f lst = match lst with
 let rec draw canvas image = match image with
     RECT {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
       ignore (GnoCanvas.rect ~props:[`FILL_COLOR (Color.to_string c);
-                                     `X1 (float_of_int x);
-                                     `Y1 (float_of_int y);
-                                     `X2 (float_of_int (x + w));
-                                     `Y2 (float_of_int (y + h))]
+                                     `X1 x;
+                                     `Y1 y;
+                                     `X2 (x +. w);
+                                     `Y2 (y +. h)]
                              canvas)
+  | POLYGON {color = c; points = lst} ->
+      let pointlst = List.flatten (List.map (fun (x, y) -> [x; y]) lst) in
+      let p = Array.of_list (List.map float_of_int pointlst) in
+      ignore (GnoCanvas.polygon ~props:[`FILL_COLOR (Color.to_string c);
+                                        `POINTS p]
+                                canvas)
   | CIRCLE {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
       ignore (GnoCanvas.ellipse ~props:[`FILL_COLOR (Color.to_string c);
-                                        `X1 (float_of_int x);
-                                        `Y1 (float_of_int y);
-                                        `X2 (float_of_int (x + w));
-                                        `Y2 (float_of_int (y + h))]
+                                        `X1 x;
+                                        `Y1 y;
+                                        `X2 (x +. w);
+                                        `Y2 (y +. h)]
                                 canvas)
-  | LINE {color = c; points =lst} ->
-     let p = Array.of_list (List.map float_of_int lst) in
+  | LINE {color = c; points = lst} ->
+     let pointlst = List.flatten (List.map (fun (x, y) -> [x; y]) lst) in
+     let p = Array.of_list (List.map float_of_int pointlst) in
      ignore (GnoCanvas.line ~props:[`FILL_COLOR (Color.to_string c);
                                     `POINTS p]
                                 canvas)
   | TEXT {color = c; text = t; x = x; y = y; size = s} ->
       ignore (GnoCanvas.text ~props:[`FILL_COLOR (Color.to_string c);
-                                     `SIZE_POINTS (float_of_int s);
+                                     `SIZE_POINTS s;
                                      `TEXT t;
-                                     `X (float_of_int x);
-                                     `Y (float_of_int y)]
+                                     `X x;
+                                     `Y y]
                              canvas)
   | PIXBUF {pixbuf = p; x = x; y = y; width = w; height = h} ->
-      ignore (GnoCanvas.pixbuf ~x:(float_of_int x)
-                               ~y:(float_of_int y)
+      ignore (GnoCanvas.pixbuf ~x:x
+                               ~y:y
                                ~pixbuf:p
                                canvas)
   | IMAGE lst -> (* 後ろから描画 *)

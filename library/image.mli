@@ -17,6 +17,11 @@ val rectangle : int -> int -> Color.t -> t
     @ja [rectangle width height color] : 横 [width]、縦 [height]、
         色 [color] の長方形を作る *)
 
+val polygon : (int * int) list -> Color.t -> t
+(** @en [polygon [(x, y);...] color] : creates a polygon with [color]
+        connecting [(x, y)]'s
+    @ja [polygon [(x, y);...] color] : [(x, y)] を繋げた、色 [color] の多角形を         作る *)
+
 val circle : int -> Color.t -> t
 (** @en [circle radius color] : creates a circle of [radius] with [color] 
     @ja [circle radius color] : 半径 [radius]、色 [color] の円を作る *)
