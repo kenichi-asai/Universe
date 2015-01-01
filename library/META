@@ -1,0 +1,42 @@
+version = "0.0"
+description = "Universe library for writing interactive games"
+requires = "universe.color universe.image universe.socket universe.world"
+archive(byte) = "universe.cma"
+archive(native) = "universe.cmxa"
+exists_if = "universe.cma"
+
+package "color" (
+  version = "0.0"
+  description = "Color subpackage for Universe library"
+  requires = "lablgtk2.gnomecanvas"
+  archive(byte) = "color.cma"
+  archive(native) = "color.cmxa"
+  exists_if = "color.cma"
+)
+
+package "image" (
+  version = "0.0"
+  description = "Image subpackage for Universe library"
+  requires = "lablgtk2.gnomecanvas"
+  archive(byte) = "image.cma"
+  archive(native) = "image.cmxa"
+  exists_if = "image.cma"
+)
+
+package "socket" (
+  version = "0.0"
+  description = "Socket subpackage for Universe library"
+  requires = "unix"
+  archive(byte) = "socket.cma"
+  archive(native) = "socket.cmxa"
+  exists_if = "socket.cma"
+)
+
+package "world" (
+  version = "0.0"
+  description = "World subpackage for Universe library"
+  requires = "lablgtk2.gnomecanvas"
+  archive(byte) = "world.cma"
+  archive(native) = "world.cmxa"
+  exists_if = "world.cma"
+)
