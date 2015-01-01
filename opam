@@ -1,0 +1,15 @@
+opam-version: "1.2"
+name: "universe"
+version: "0.0"
+authors: ["Chihiro Uehara" "Kenichi Asai"]
+homepage: "http://pllab.is.ocha.ac.jp/~asai/Universe/"
+build: [
+  ["cp" "%{lib}%/ocaml-makefile/OCamlMakefile" "."]
+  ["sh" "-c" "cd library && %{make}% bcl ncl"]
+]
+install: ["sh" "-c" "cd library && %{make}% install"]
+remove: ["ocamlfind" "remove" "universe"]
+depends: ["ocamlfind"
+          "conf-gnomecanvas"
+          "lablgtk"
+          "ocaml-makefile"]
