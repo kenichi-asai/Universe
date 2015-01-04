@@ -139,7 +139,7 @@ let rec rev_iter f lst = match lst with
 (* draw : #GnoCanvas.group -> Image.t -> unit *)
 let rec draw canvas image = match image with
     RECT {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
-      ignore (GnoCanvas.rect ~props:[`FILL_COLOR (Color.to_string c);
+      ignore (GnoCanvas.rect ~props:[`FILL_COLOR_RGBA (to_int32 c);
                                      `X1 x;
                                      `Y1 y;
                                      `X2 (x +. w);
@@ -148,11 +148,11 @@ let rec draw canvas image = match image with
   | POLYGON {color = c; points = lst} ->
       let pointlst = List.flatten (List.map (fun (x, y) -> [x; y]) lst) in
       let p = Array.of_list (List.map float_of_int pointlst) in
-      ignore (GnoCanvas.polygon ~props:[`FILL_COLOR (Color.to_string c);
+      ignore (GnoCanvas.polygon ~props:[`FILL_COLOR_RGBA (to_int32 c);
                                         `POINTS p]
                                 canvas)
   | CIRCLE {color = c; x1 = x; y1 = y; x2 = w; y2 = h} ->
-      ignore (GnoCanvas.ellipse ~props:[`FILL_COLOR (Color.to_string c);
+      ignore (GnoCanvas.ellipse ~props:[`FILL_COLOR_RGBA (to_int32 c);
                                         `X1 x;
                                         `Y1 y;
                                         `X2 (x +. w);
@@ -161,11 +161,11 @@ let rec draw canvas image = match image with
   | LINE {color = c; points = lst} ->
      let pointlst = List.flatten (List.map (fun (x, y) -> [x; y]) lst) in
      let p = Array.of_list (List.map float_of_int pointlst) in
-     ignore (GnoCanvas.line ~props:[`FILL_COLOR (Color.to_string c);
+     ignore (GnoCanvas.line ~props:[`FILL_COLOR_RGBA (to_int32 c);
                                     `POINTS p]
                                 canvas)
   | TEXT {color = c; text = t; x = x; y = y; size = s} ->
-      ignore (GnoCanvas.text ~props:[`FILL_COLOR (Color.to_string c);
+      ignore (GnoCanvas.text ~props:[`FILL_COLOR_RGBA (to_int32 c);
                                      `SIZE_POINTS s;
                                      `TEXT t;
                                      `X x;

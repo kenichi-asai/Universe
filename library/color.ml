@@ -6,7 +6,7 @@
 (* 良ければ使ってくださいな *)
 
 (* 色 *)
-type t = string
+type t = int32
 
 let asciiA_10 = Char.code 'A' - 10
 
@@ -18,11 +18,17 @@ let rec to_hex n =      (* １６進文字列に変換する *)
   (if one < 10 then string_of_int one
                else String.make 1 (Char.chr (asciiA_10 + one)))
 
-let make_color r g b = "#" ^ to_hex r ^ to_hex g ^ to_hex b
+(* 透過率の初期値は255 *)
+let make_color ?(alpha = 255) r g b = 
+  Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
+                       (Int32.of_int 256))
+            (Int32.of_int alpha)
 
-let to_string color = color
+
+let to_int32 color = color
 
 (* These colors : Color.t *)
+let transparent         = make_color 255 255 255 ~alpha:0
 let snow                = make_color 255 250 250
 let ghostWhite          = make_color 248 248 255
 let whiteSmoke          = make_color 245 245 245

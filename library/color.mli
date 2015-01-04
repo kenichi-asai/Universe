@@ -5,17 +5,16 @@ type t
 (** @en [Color.t] : the type of colors 
     @ja [Color.t] : 色の型 *)
 
-val make_color : int -> int -> int -> t
-(** @en [make_color r g b] : creates a color from RGB
-    @ja [make_color r g b] : RGB から色を作る *)
-
-val to_string : t -> string
-(** @en [to_string color] : converts [color] into a string form "#RRGGBB"
-    @ja [to_string color] : 色を "#RRGGBB" という文字列に変換する *)
+val make_color : ?alpha: int -> int -> int -> int -> t
+(** @en [make_color r g b ~alpha:a] : creates a color from RGB and
+                                      optional alpha (default: 255)
+    @ja [make_color r g b ~alpha:a] : RGB と透過率 A から色を作る。
+                                      透過率は省略すると 255 になる *)
 
 (**     A list of predefined colors
     @ja 提供されている色 *)
 
+val transparent : t
 val snow : t
 val ghostWhite : t
 val whiteSmoke : t
@@ -565,3 +564,8 @@ val darkCyan : t
 val darkMagenta : t
 val darkRed : t
 val lightGreen : t
+
+(**/**)
+val to_int32 : t -> int32
+(** @en [to_int32 color] : convert [color] into int32 form type [t]
+    @ja [to_int32 color] : [color]の型を[t]からint32にする *)
