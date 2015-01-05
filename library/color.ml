@@ -19,12 +19,28 @@ let rec to_hex n =      (* １６進文字列に変換する *)
                else String.make 1 (Char.chr (asciiA_10 + one)))
 
 (* 透過率の初期値は255 *)
-let make_color ?(alpha = 255) r g b = 
+let make_color ?(alpha = 255) r g b =
   Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
                        (Int32.of_int 256))
             (Int32.of_int alpha)
 
+(* convert a color into RGBA *)
+let to_rgba rgba =
+  let int255 = Int32.of_int 255 in
+  let a = Int32.to_int (Int32.logand rgba int255) in
+  let rgb = Int32.shift_right_logical rgba 8 in
+  let b = Int32.to_int (Int32.logand rgb int255) in
+  let rg = Int32.shift_right_logical rgb 8 in
+  let g = Int32.to_int (Int32.logand rg int255) in
+  let r = Int32.to_int (Int32.shift_right_logical rg 8) in
+  (r, g, b, a)
 
+(* convert a color into RGB ignoring alpha *)
+let to_rgb color =
+  let (r, g, b, a) = to_rgba color in
+  (r, g, b)
+
+(* convert a color into int32 *)
 let to_int32 color = color
 
 (* These colors : Color.t *)
