@@ -35,7 +35,7 @@ val big_bang :
                        mouse event; returns a new [world]
         - [on_key_press] : receives a [world] and a name of a pressed key;
                            returns a new [world]
-        - [on_key_press] : receives a [world] and a name of a released key;
+        - [on_key_release] : receives a [world] and a name of a released key;
                            returns a new [world]
         - [rate] : an interval of 1 tick in sec
         - [stop_when] : receives a [world];
@@ -55,7 +55,7 @@ val big_bang :
                         新しい世界を返す関数
         - [on_key_press] : 世界と押されたキー名を受け取ったら、
                         新しい世界を返す関数
-        - [on_key_press] : 世界と離されたキー名を受け取ったら、
+        - [on_key_release] : 世界と離されたキー名を受け取ったら、
                         新しい世界を返す関数
         - [rate] : 1 tick の間隔（秒）
         - [stop_when] : 世界を受け取り、ゲーム終了ならtrueを返す関数
