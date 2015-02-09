@@ -1,8 +1,8 @@
-(**     Color module
+(**     Color module 
     @ja 色モジュール *)
 
 type t
-(** @en [Color.t] : the type of colors
+(** @en [Color.t] : the type of colors 
     @ja [Color.t] : 色の型 *)
 
 val make_color : ?alpha: int -> int -> int -> int -> t
@@ -10,14 +10,6 @@ val make_color : ?alpha: int -> int -> int -> int -> t
                                       optional alpha (default: 255)
     @ja [make_color r g b ~alpha:a] : RGB と透過率 A から色を作る。
                                       透過率は省略すると 255 になる *)
-
-val to_rgba : t -> int * int * int * int
-(** @en [to_rgba color] : extracts RGBA from a [color]
-    @ja [to_rgba color] : [color] を RGBA に変換する *)
-
-val to_rgb : t -> int * int * int
-(** @en [to_rgb color] : extracts RGB from a [color] ignoring alpha
-    @ja [to_rgb color] : [color] を RGB に変換する。alpha は無視される *)
 
 (**     A list of predefined colors
     @ja 提供されている色 *)
@@ -574,6 +566,15 @@ val darkRed : t
 val lightGreen : t
 
 (**/**)
-val to_int32 : t -> int32
-(** @en [to_int32 color] : converts [color] into int32 form type [t]
-    @ja [to_int32 color] : [color] の型を [t] から int32 にする *)
+val getr : t -> float
+(** @en [getr color] : get R from RGB of [color]
+    @ja [getr color] : [color] のRGB値からRを得る *)
+val getg : t -> float
+(** @en [getg color] : get G from RGB of [color]
+    @ja [getg color] : [color] のRGB値からGを得る *)
+val getb : t -> float
+(** @en [getb color] : get B from RGB of [color]
+    @ja [getb color] : [color] のRGB値からBを得る *)
+val geta : t -> float
+(** @en [geta color] : get alpha value from [color]
+    @ja [geta color] : [color] から透過率を得る *)

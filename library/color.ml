@@ -3,10 +3,9 @@
 (* 上のサイトにある色をそのまますべてもってきているので、
 　 サイトに記載されている色名を入力すればそのまま使えます。
   ※ただしocamlの仕様上、１文字目は小文字に変えているので注意 *)
-(* 良ければ使ってくださいな *)
 
 (* 色 *)
-type t = int32
+type t = (*int32*)float * float * float * float
 
 let asciiA_10 = Char.code 'A' - 10
 
@@ -18,29 +17,21 @@ let rec to_hex n =      (* １６進文字列に変換する *)
   (if one < 10 then string_of_int one
                else String.make 1 (Char.chr (asciiA_10 + one)))
 
+let getr (r, g, b, a) = r
+let getg (r, g, b, a) = g
+let getb (r, g, b, a) = b
+let geta (r, g, b, a) = a
 (* 透過率の初期値は255 *)
-let make_color ?(alpha = 255) r g b =
-  Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
+let make_color ?(alpha = 255) r g b = 
+  ((float_of_int r) /. 255., 
+   (float_of_int g) /. 255.,
+   (float_of_int b) /. 255., 
+   (float_of_int alpha) /. 255.)
+  (*Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
                        (Int32.of_int 256))
-            (Int32.of_int alpha)
+            (Int32.of_int alpha)*)
 
-(* convert a color into RGBA *)
-let to_rgba rgba =
-  let int255 = Int32.of_int 255 in
-  let a = Int32.to_int (Int32.logand rgba int255) in
-  let rgb = Int32.shift_right_logical rgba 8 in
-  let b = Int32.to_int (Int32.logand rgb int255) in
-  let rg = Int32.shift_right_logical rgb 8 in
-  let g = Int32.to_int (Int32.logand rg int255) in
-  let r = Int32.to_int (Int32.shift_right_logical rg 8) in
-  (r, g, b, a)
 
-(* convert a color into RGB ignoring alpha *)
-let to_rgb color =
-  let (r, g, b, a) = to_rgba color in
-  (r, g, b)
-
-(* convert a color into int32 *)
 let to_int32 color = color
 
 (* These colors : Color.t *)

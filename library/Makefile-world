@@ -1,5 +1,6 @@
 SOURCES = world.mli world.ml
-PACKS = lablgtk2.gnomecanvas
+PACKS = cairo2.lablgtk2 lablgtk2.gnomecanvas
+LIBS = socket image
 RESULT = world
 OCAMLMAKEFILE = ../OCamlMakefile
 include $(OCAMLMAKEFILE)

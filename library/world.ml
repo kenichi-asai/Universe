@@ -64,7 +64,8 @@ let big_bang ?(name="My Game")
   (* draw の初期値 *)
   (* width, height が必要なので big_bang の外では定義できない *)
   (* initial_draw : 'a -> Image.t *)
-  let initial_draw w = Image.empty_scene width height in
+  let initial_draw w = Image.empty_scene (float_of_int width) 
+					 (float_of_int height) in
 
   (* draw : 'a -> Image.t *)
   let draw = match to_draw with
@@ -94,8 +95,6 @@ let big_bang ?(name="My Game")
   (*でもボーダーがゼロでない限りボーダー引いてもちょっと反応がにぶいから、ボー
     ダー はゼロにしとくのがよさそう。*)
 
-  (*resizableをtrueにすると、外枠が変えられて、クリックが正しい位置で受け取れな
-    くなる*) 
   (*windowのshowは、最初falseにしておかないと、何も表示されるものが登録されてい
     ないので、灰色の画面が出てしまう*)
   let window = GWindow.window ~border_width:border
@@ -105,7 +104,7 @@ let big_bang ?(name="My Game")
                               ~width:width
                               ~height:height
                               () in
-
+  
   (* 世界 *)
   let world = ref initial_world in
 
@@ -119,15 +118,19 @@ let big_bang ?(name="My Game")
 
   (* 画像を描く *)
   let draw_window draw =
-    let canvas = GnoCanvas.canvas ~aa:true ~width:width ~height:height () in
-    Image.draw canvas#root (draw !world);
-    clear window;
-    canvas#set_pixels_per_unit 1.0;
-    canvas#set_scroll_region ~x1:0. ~y1:0.
-                             ~x2:(float_of_int width)
-                             ~y2:(float_of_int height);
-    window#add canvas#coerce;
-    window#show ()
+    begin
+      clear window;
+      let drawing_area = 
+	GMisc.drawing_area ~width:width ~height:height ~packing:window#add () in
+      let expose drawingarea ev = 
+	let context = Cairo_gtk.create drawingarea#misc#window in 
+	begin
+	  Image.draw context (draw !world);
+	  true 
+	end in
+      ignore(drawing_area#event#connect#expose (expose drawing_area));
+      window#show ()
+    end
   in
 
   (* stop_when !world が成立したら false になる *)
@@ -270,7 +273,7 @@ let big_bang ?(name="My Game")
       end else 
       false
   in
-
+ 
   (* big_bang のメイン *)
 
   window#event#add [`BUTTON_PRESS; `BUTTON_RELEASE; `KEY_PRESS; `KEY_RELEASE];

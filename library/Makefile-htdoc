@@ -1,5 +1,5 @@
 SOURCES = color.mli image.mli socket.mli world.mli universe.mli
-PACKS = lablgtk2.gnomecanvas 
+PACKS = cairo2.lablgtk2 lablgtk2.gnomecanvas 
 OCAMLDOCFLAGS = -charset utf-8 -t "OCaml Universe Library" -hide-warnings
 RESULT = htdoc
 OCAMLMAKEFILE = ../OCamlMakefile
