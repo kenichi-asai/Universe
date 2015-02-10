@@ -44,9 +44,10 @@ val circle : float -> ?fill:bool -> ?outline_size:float -> Color.t -> t
 
 val line : (float * float) list -> ?size:float -> Color.t -> t
 (** @en [line [(x, y);...] color] : creates a line with [color]
-        connecting [(x, y)]'s.
+        starting from [(0, 0)] connecting [(x, y)]'s.
         The line width is [size] point.
-    @ja [line [(x, y);...] color] : [(x, y)] を繋げた色 [color] の線を作る。
+    @ja [line [(x, y);...] color] : [(0, 0)] から初めて [(x, y)] を
+        繋げた色 [color] の線を作る。
         線のサイズは [size] ポイント *)
 
 val text : string -> ?size:float -> Color.t -> t
