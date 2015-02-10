@@ -1,15 +1,16 @@
-(* 参考にしたサイト→http://lowlife.jp/yasusii/static/color_chart.html *)
+(* $B;29M$K$7$?%5%$%H"*(Bhttp://lowlife.jp/yasusii/static/color_chart.html *)
 
-(* 上のサイトにある色をそのまますべてもってきているので、
-　 サイトに記載されている色名を入力すればそのまま使えます。
-  ※ただしocamlの仕様上、１文字目は小文字に変えているので注意 *)
+(* $B>e$N%5%$%H$K$"$k?'$r$=$N$^$^$9$Y$F$b$C$F$-$F$$$k$N$G!"(B
+$B!!(B $B%5%$%H$K5-:\$5$l$F$$$k?'L>$rF~NO$9$l$P$=$N$^$^;H$($^$9!#(B
+  $B"($?$@$7(Bocaml$B$N;EMM>e!"#1J8;zL\$O>.J8;z$KJQ$($F$$$k$N$GCm0U(B *)
+(* $BNI$1$l$P;H$C$F$/$@$5$$$J(B *)
 
-(* 色 *)
-type t = (*int32*)float * float * float * float
+(* $B?'(B *)
+type t = int32
 
 let asciiA_10 = Char.code 'A' - 10
 
-let rec to_hex n =      (* １６進文字列に変換する *)
+let rec to_hex n =      (* $B#1#6?JJ8;zNs$KJQ49$9$k(B *)
   let ten = (n mod 256) / 16 in
   let one = n mod 16 in
   (if ten < 10 then string_of_int ten
@@ -17,21 +18,29 @@ let rec to_hex n =      (* １６進文字列に変換する *)
   (if one < 10 then string_of_int one
                else String.make 1 (Char.chr (asciiA_10 + one)))
 
-let getr (r, g, b, a) = r
-let getg (r, g, b, a) = g
-let getb (r, g, b, a) = b
-let geta (r, g, b, a) = a
-(* 透過率の初期値は255 *)
-let make_color ?(alpha = 255) r g b = 
-  ((float_of_int r) /. 255., 
-   (float_of_int g) /. 255.,
-   (float_of_int b) /. 255., 
-   (float_of_int alpha) /. 255.)
-  (*Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
+(* $BF)2aN($N=i4|CM$O(B255 *)
+let make_color ?(alpha = 255) r g b =
+  Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
                        (Int32.of_int 256))
-            (Int32.of_int alpha)*)
+            (Int32.of_int alpha)
 
+(* convert a color into RGBA *)
+let to_rgba rgba =
+  let int255 = Int32.of_int 255 in
+  let a = Int32.to_int (Int32.logand rgba int255) in
+  let rgb = Int32.shift_right_logical rgba 8 in
+  let b = Int32.to_int (Int32.logand rgb int255) in
+  let rg = Int32.shift_right_logical rgb 8 in
+  let g = Int32.to_int (Int32.logand rg int255) in
+  let r = Int32.to_int (Int32.shift_right_logical rg 8) in
+  (r, g, b, a)
 
+(* convert a color into RGB ignoring alpha *)
+let to_rgb color =
+  let (r, g, b, a) = to_rgba color in
+  (r, g, b)
+
+(* convert a color into int32 *)
 let to_int32 color = color
 
 (* These colors : Color.t *)
