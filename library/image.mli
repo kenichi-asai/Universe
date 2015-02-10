@@ -71,14 +71,16 @@ val place_images : t list -> (float * float) list -> t -> t
     @ja [place_images images posns scene] : 画像 [scene] の上に
         画像の列 [images] をそれぞれ [posns] の位置に置く *)
 
-val image_to_bitmap : t -> Cairo.Image.data32
-(** @en [image_to_bitmap image] : converts [image] to bitmap of type data32.
-    @ja [image_to_bitmap image] : 画像 [image] を data32 型のビットマップに
+val to_bitmap : t -> Cairo.Image.data32
+(** @en [to_bitmap image] : converts [image] to bitmap of type
+        {{:http://cairo.forge.ocamlcore.org/tutorial/Cairo.Image.html#TYPEdata32} data32}.
+    @ja [to_bitmap image] : 画像 [image] を {{:http://cairo.forge.ocamlcore.org/tutorial/Cairo.Image.html#TYPEdata32} data32} 型のビットマップに
         出力する *)
 
-val bitmap_to_image : Cairo.Image.data32 -> t
-(** @en [bitmap_to_image data] : converts [data] of type data32 to an image
-    @ja [bitmap_to_image data] : data32 型のビットマップ [data] を
+val from_bitmap : Cairo.Image.data32 -> t
+(** @en [from_bitmap data] : converts [data] of type
+        {{:http://cairo.forge.ocamlcore.org/tutorial/Cairo.Image.html#TYPEdata32} data32} to an image
+    @ja [from_bitmap data] : {{:http://cairo.forge.ocamlcore.org/tutorial/Cairo.Image.html#TYPEdata32} data32} 型のビットマップ [data] を
         画像として取り込む *)
 
 val freeze : t -> t

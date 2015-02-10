@@ -372,12 +372,12 @@ let image_to_surface image =
   draw context (move_one move_distance move_distance image);
   (surface, move_distance)
 
-(* image_to_bitmap : Image.t -> data32 *)
-let image_to_bitmap image =
+(* to_bitmap : Image.t -> Cairo.Image.data32 *)
+let to_bitmap image =
   Cairo.Image.get_data32 (fst (image_to_surface image))
 
-(* bitmap_to_image : data32 -> Image.t *)
-let bitmap_to_image data =
+(* from_bitmap : Cairo.Image.data32 -> Image.t *)
+let from_bitmap data =
   PICTURE {picture = Cairo.Image.create_for_data32 data; x = 0.; y = 0.}
 
 (* freeze : Image.t -> Image.t *)
