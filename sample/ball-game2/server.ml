@@ -11,7 +11,7 @@ let init_state : state_t = []
 
 (* enlarge : Ball.t -> Ball.t *)
 let enlarge {center = p; vector = v; radius = r; color = c} =
-  {center = p; vector = v; radius = r + 5; color = c}
+  {center = p; vector = v; radius = r +. 5.; color = c}
 
 (* send_messages : state_t -> (state_t, world_t) Universe.t *)
 let send_messages state =
@@ -36,15 +36,16 @@ let onnew state world_id =
                            state in (* existing balls are enlarged *)
   send_messages new_state
 
-(* mod, but the result is always from 0 to b - 1 *)
-(* mymod : int -> int -> int *)
-let mymod a b =
-  let x = a mod b in
-  if x < 0 then x + b else x
+(* mod, but the result is always between 0 and b *)
+(* mymod : float -> float -> float *)
+let rec mymod a b =
+  if a < 0. then mymod (a +. b) b
+  else if b <= a then mymod (a -. b) b
+  else a
 
-(* add_posn : int * int -> int * int -> int * int *)
+(* add_posn : float * float -> float * float -> float * float *)
 let add_posn posn vector = match (posn, vector) with
-  ((x1, x2), (v1, v2)) -> (mymod (x1 + v1) width, mymod (x2 + v2) height)
+  ((x1, x2), (v1, v2)) -> (mymod (x1 +. v1) width, mymod (x2 +. v2) height)
 
 (* move_ball_on_tick : Ball.t -> Ball.t *)
 let move_ball_on_tick {center = p; vector = v; radius = r; color = c} =
@@ -58,14 +59,14 @@ let move_on_tick state =
   send_messages new_state
 
 (* check if (x, y) is within r from (x0, y0) *)
-(* is_inside : int -> int -> int * int -> int -> bool *)
+(* is_inside : float -> float -> float * float -> float -> bool *)
 let is_inside x y (x0, y0) r =
-  (x - x0) * (x - x0) + (y - y0) * (y - y0) <= r * r 
+  (x -. x0) *. (x -. x0) +. (y -. y0) *. (y -. y0) <= r *. r 
 
 (* change_ball : Ball.t -> Ball.t *)
 let change_ball ({center = p; vector = v; radius = r; color = c} as ball) =
-  if r <= 5 then ball
-  else make_random_ball (r - 5) c
+  if r <= 5. then ball
+  else make_random_ball (r -. 5.) c
 
 (* andmap : ('a -> bool) -> 'a list -> bool *)
 let rec andmap f lst = match lst with
@@ -77,13 +78,13 @@ let rec ormap f lst = match lst with
     [] -> false
   | first :: rest -> f first || ormap f rest
 
-(* change_lob_on_mouse : Ball.t list -> int -> int -> Ball.t list *)
+(* change_lob_on_mouse : Ball.t list -> float -> float -> Ball.t list *)
 let change_lob_on_mouse lob x y =
   let is_inside_ball ball = is_inside x y ball.center ball.radius in
   let change ball = if is_inside_ball ball then change_ball ball else ball in
   List.map change lob
 
-(* change_on_mouse : state_t -> 'a -> int * int ->
+(* change_on_mouse : state_t -> 'a -> float * float ->
                      (state_t, world_t) Universe.t *)
 let change_on_mouse state world_id (x, y) =
   (* the received message (x, y) is the clicked position *)

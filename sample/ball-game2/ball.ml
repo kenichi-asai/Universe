@@ -3,16 +3,16 @@ open Const
 
 (* Ball.t : type of balls *)
 type t = {
-  center : int * int;
-  vector : int * int;
-  radius : int;
+  center : float * float;
+  vector : float * float;
+  radius : float;
   color : Color.t;
 }
 
-(* make_random_ball : int -> Image.color_t -> Ball.t *)
+(* make_random_ball : float -> Image.color_t -> Ball.t *)
 let make_random_ball radius color = {
-  center = (Random.int width, Random.int height);
-  vector = (Random.int 3 - 1, Random.int 3 - 1);
+  center = (Random.float width, Random.float height);
+  vector = (Random.float 3. -. 1., Random.float 3. -. 1.);
   radius = radius;
   color = color;
 }
@@ -21,6 +21,6 @@ let make_random_ball radius color = {
 let ball_image ball = match ball with
   {radius = r; color = c} -> circle r (*"solid"*) c
 
-(* ball_top_left : Ball.t -> int * int *)
+(* ball_top_left : Ball.t -> float * float *)
 let ball_top_left ball = match ball with
-  {center = (x, y); radius = r} -> (x - r, y - r)
+  {center = (x, y); radius = r} -> (x -. r, y -. r)

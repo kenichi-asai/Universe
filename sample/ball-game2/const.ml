@@ -1,9 +1,9 @@
 open Color
 
 (* constants *)
-let radius =  30                (* initial radius of balls *)
-let width  = 500                (* window width *)
-let height = 400                (* window height *)
+let radius =  30.               (* initial radius of balls *)
+let width  = 500.               (* window width *)
+let height = 400.               (* window height *)
 
 let table = [|                  (* color table *)
   make_color 0xff 0x00 0x00;

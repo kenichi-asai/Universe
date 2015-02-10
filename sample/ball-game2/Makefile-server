@@ -1,7 +1,5 @@
 SOURCES = const.ml ball.ml server.ml
-PACKS = lablgtk2.gnomecanvas unix
-INCDIRS = ../../library
-LIBS = socket color image universe
+PACKS = universe
 RESULT = server
 OCAMLMAKEFILE = ../../OCamlMakefile
 include $(OCAMLMAKEFILE)
