@@ -1,16 +1,16 @@
-(* $B;29M$K$7$?%5%$%H"*(Bhttp://lowlife.jp/yasusii/static/color_chart.html *)
+(* 参考にしたサイト→http://lowlife.jp/yasusii/static/color_chart.html *)
 
-(* $B>e$N%5%$%H$K$"$k?'$r$=$N$^$^$9$Y$F$b$C$F$-$F$$$k$N$G!"(B
-$B!!(B $B%5%$%H$K5-:\$5$l$F$$$k?'L>$rF~NO$9$l$P$=$N$^$^;H$($^$9!#(B
-  $B"($?$@$7(Bocaml$B$N;EMM>e!"#1J8;zL\$O>.J8;z$KJQ$($F$$$k$N$GCm0U(B *)
-(* $BNI$1$l$P;H$C$F$/$@$5$$$J(B *)
+(* 上のサイトにある色をそのまますべてもってきているので、
+　 サイトに記載されている色名を入力すればそのまま使えます。
+  ※ただしocamlの仕様上、１文字目は小文字に変えているので注意 *)
+(* 良ければ使ってくださいな *)
 
-(* $B?'(B *)
+(* 色 *)
 type t = int32
 
 let asciiA_10 = Char.code 'A' - 10
 
-let rec to_hex n =      (* $B#1#6?JJ8;zNs$KJQ49$9$k(B *)
+let rec to_hex n =      (* １６進文字列に変換する *)
   let ten = (n mod 256) / 16 in
   let one = n mod 16 in
   (if ten < 10 then string_of_int ten
@@ -18,7 +18,7 @@ let rec to_hex n =      (* $B#1#6?JJ8;zNs$KJQ49$9$k(B *)
   (if one < 10 then string_of_int one
                else String.make 1 (Char.chr (asciiA_10 + one)))
 
-(* $BF)2aN($N=i4|CM$O(B255 *)
+(* 透過率の初期値は255 *)
 let make_color ?(alpha = 255) r g b =
   Int32.add (Int32.mul (Int32.of_int ((r * 256 + g) * 256 + b))
                        (Int32.of_int 256))

@@ -1,26 +1,26 @@
 (**     Color module
-    @ja $B?'%b%8%e!<%k(B *)
+    @ja 色モジュール *)
 
 type t
 (** @en [Color.t] : the type of colors
-    @ja [Color.t] : $B?'$N7?(B *)
+    @ja [Color.t] : 色の型 *)
 
 val make_color : ?alpha: int -> int -> int -> int -> t
 (** @en [make_color r g b ~alpha:a] : creates a color from RGB and
                                       optional alpha (default: 255)
-    @ja [make_color r g b ~alpha:a] : RGB $B$HF)2aN((B A $B$+$i?'$r:n$k!#(B
-                                      $BF)2aN($O>JN,$9$k$H(B 255 $B$K$J$k(B *)
+    @ja [make_color r g b ~alpha:a] : RGB と透過率 A から色を作る。
+                                      透過率は省略すると 255 になる *)
 
 val to_rgba : t -> int * int * int * int
 (** @en [to_rgba color] : extracts RGBA from a [color]
-    @ja [to_rgba color] : [color] $B$r(B RGBA $B$KJQ49$9$k(B *)
+    @ja [to_rgba color] : [color] を RGBA に変換する *)
 
 val to_rgb : t -> int * int * int
 (** @en [to_rgb color] : extracts RGB from a [color] ignoring alpha
-    @ja [to_rgb color] : [color] $B$r(B RGB $B$KJQ49$9$k!#(Balpha $B$OL5;k$5$l$k(B *)
+    @ja [to_rgb color] : [color] を RGB に変換する。alpha は無視される *)
 
 (**     A list of predefined colors
-    @ja $BDs6!$5$l$F$$$k?'(B *)
+    @ja 提供されている色 *)
 
 val transparent : t
 val snow : t
@@ -577,4 +577,4 @@ val lightGreen : t
 
 val to_int32 : t -> int32
 (** @en [to_int32 color] : converts [color] into int32 form type [t]
-    @ja [to_int32 color] : [color] $B$N7?$r(B [t] $B$+$i(B int32 $B$K$9$k(B *)
+    @ja [to_int32 color] : [color] の型を [t] から int32 にする *)
