@@ -88,7 +88,7 @@ let big_bang ?(name="My Game")
   (* 通信をしなくても作ってしまうのがいまひとつ *)
   let server_sockfd = Socket.make_sockfd () in
 
-  let border = 0 in
+  let border = 0. in
   (*マウスイベントは、ボーダーが入っていようといまいとwindowの左上を原点にする
     が、wigetはボーダー分進んだ左上を原点にするので、マウスイベントの座標マイナ
     スボーダーをしてあげないと座標の数え方があわない*)
@@ -97,7 +97,7 @@ let big_bang ?(name="My Game")
 
   (*windowのshowは、最初falseにしておかないと、何も表示されるものが登録されてい
     ないので、灰色の画面が出てしまう*)
-  let window = GWindow.window ~border_width:border
+  let window = GWindow.window ~border_width:(int_of_float border)
                               ~title:name
                               ~show:false
                               ~resizable:false
@@ -174,8 +174,8 @@ let big_bang ?(name="My Game")
 
   (* マウスイベントの処理 *)
   let mouse_event str ev =
-    let nowx = int_of_float (GdkEvent.Button.x ev) - border in
-    let nowy = int_of_float (GdkEvent.Button.y ev) - border in
+    let nowx = GdkEvent.Button.x ev -. border in
+    let nowy = GdkEvent.Button.y ev -. border in
     let result = on_mouse !world nowx nowy str in
     update_and_draw result;
     true

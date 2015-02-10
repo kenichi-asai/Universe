@@ -16,7 +16,7 @@ val big_bang :
   ?height:int ->
   ?to_draw:('a -> Image.t) ->
   ?on_tick:('a -> ('a, 'b) t) ->
-  ?on_mouse:('a -> int -> int -> string -> ('a, 'c) t) ->
+  ?on_mouse:('a -> float -> float -> string -> ('a, 'c) t) ->
   ?on_key_press:('a -> string -> ('a, 'd) t) ->
   ?on_key_release:('a -> string -> ('a, 'e) t) ->
   ?rate:float ->
