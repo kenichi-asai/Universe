@@ -10,7 +10,7 @@ build: [
 install: ["sh" "-c" "cd library && %{make}% install"]
 remove: ["ocamlfind" "remove" "universe"]
 depends: ["ocamlfind"
-	  "cairo2"
+          "cairo2"
           "conf-gnomecanvas"
           "lablgtk"
           "ocaml-makefile"]

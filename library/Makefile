@@ -37,3 +37,9 @@ clean :
 	make clean -f Makefile-$(UNIVERSE)
 	cd ocamldoc; make clean
 	rm -Rf doc
+
+install : bcl ncl
+	ocamlfind install universe META $(wildcard *.cma *.mli *.cmxa *.cmi *.a)
+
+uninstall :
+	ocamlfind remove universe
