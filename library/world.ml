@@ -289,14 +289,9 @@ let big_bang ?(name="My Game")
 
   (*まずサーバーに登録*)
   (*クライアントのソケットとサーバのソケットの接続*)
-  let register' = match register with
-    None -> obtain_addrinfo ()
-  | Some (_, _) -> register
-  in
-  (* ここの match 文の連続はもう少しきれいにならないかと思うが... *)
-  begin match register' with 
-    None -> ()
-  | Some (ipaddress, portnumber) -> 
+  register
+  |> Option.orElse (lazy (obtain_addrinfo ()))
+  |> Option.iter (fun (ipaddress, portnumber) -> begin
       Socket.connect (ipaddress, portnumber) server_sockfd;
       (*ignore (GMain.Io.add_watch ~cond:[`IN]
                                  ~callback:receive_event
@@ -306,7 +301,7 @@ let big_bang ?(name="My Game")
                                  ~callback:receive_event
                                  ~prio:(Glib.int_of_priority `LOW)
                                  (GMain.Io.channel_of_descr server_sockfd));
-  end;
+  end);
 
   (* ここで最初の画面の表示 *)
   update_and_draw (World !world);
