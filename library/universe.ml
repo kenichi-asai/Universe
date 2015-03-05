@@ -58,19 +58,14 @@ let universe ?(on_new=initial_new)
 
   (* universe 内で使う各種関数群 *)
 
-  let reset_flag = ref false in 
-  (* trueになったらstateの初期値を返してサーバをリセット *)
-
 
   (* client_sockfdをもらったらそれを通信からはずす *)
-  (* client_sockfdをcloseする *)
+  (* client_sockfdをcloseする. *)
   let cut_communication client_sockfd =
     if List.mem_assoc client_sockfd !clientlst then 
       begin
         clientlst := List.remove_assoc client_sockfd !clientlst;
         Socket.close client_sockfd;
-        if !clientlst = [] then 
-          reset_flag := true
       end
   (* もしもともと通信から抜けていたら何もしない *)
   in
@@ -86,15 +81,12 @@ let universe ?(on_new=initial_new)
                             Socket.send None first;
                             (* クライアントにもう送らないでねって合図を送る *)
                             GMain.Io.remove (List.assoc first !clientlst);
-                            (* add_watchの登録を解除 *)
-                            cut_communication first; 
-                            (* 通信を切る処理 *)
-                            if !reset_flag 
+                            (* add_watchの登録を解除. *)
+                            cut_communication first;
+                            (* すべてのクライアントがいなくなったら、状態リセット *)
+                            if !clientlst = []
                             then 
-                              begin
-                                state := initial_state;
-                                reset_flag := false
-                              end
+                              state := initial_state
                             else
                               update_and_send (Bundle (!state, maillst, rest))
                            (* restとmailの処理 *)
