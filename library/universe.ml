@@ -66,7 +66,10 @@ let universe ?(on_new=initial_new)
       begin
         clientlst := List.remove_assoc client_sockfd !clientlst;
         Socket.close client_sockfd;
+        !clientlst = []
       end
+    else
+      false
   (* もしもともと通信から抜けていたら何もしない *)
   in
   (* update_and_send : 'a * 'b list * iworld_t list -> unit *)
@@ -82,9 +85,8 @@ let universe ?(on_new=initial_new)
                             (* クライアントにもう送らないでねって合図を送る *)
                             GMain.Io.remove (List.assoc first !clientlst);
                             (* add_watchの登録を解除. *)
-                            cut_communication first;
-                            (* すべてのクライアントがいなくなったら、状態リセット *)
-                            if !clientlst = []
+                            (* firstが解除されて、かつすべてのクライアントがいなくなったら、状態リセット *)
+                            if cut_communication first
                             then 
                               state := initial_state
                             else
