@@ -1,4 +1,4 @@
-SOURCES = world.mli world.ml
+SOURCES = option.ml world.mli world.ml
 PACKS = cairo2.lablgtk2 lablgtk2.gnomecanvas
 RESULT = world
 OCAMLMAKEFILE = ../OCamlMakefile
