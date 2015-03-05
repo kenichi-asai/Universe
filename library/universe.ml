@@ -64,7 +64,7 @@ let universe ?(on_new=initial_new)
 
   (* client_sockfdをもらったらそれを通信からはずす *)
   (* client_sockfdをcloseする *)
-  let rec cut_communication client_sockfd =
+  let cut_communication client_sockfd =
     if List.mem_assoc client_sockfd !clientlst then 
       begin
         clientlst := List.remove_assoc client_sockfd !clientlst;
@@ -74,7 +74,6 @@ let universe ?(on_new=initial_new)
       end
   (* もしもともと通信から抜けていたら何もしない *)
   in
-        
   (* update_and_send : 'a * 'b list * iworld_t list -> unit *)
   (* 状態を更新し、メールを送る。ここが唯一の state を変更する場所 *)
   (* iworldlstは通信から外したいクライアントのリスト。これが空でないとループ *)
