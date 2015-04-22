@@ -207,22 +207,24 @@ let rec draw_line plst context = match plst with
       Cairo.rel_line_to context ~x:x ~y:y;
       draw_line rest context
 
+let ratio_of_int x = float_of_int x /. 255.
+
 (* image を canvas に描画する *)
 (* draw : Cairo.context -> t -> unit *)
 let rec draw context image = match image with
     RECT {color = c; x1 = x; y1 = y; x2 = w; y2 = h;
           fill = fill; outline_size = outline_size} ->
       let (r, g, b, a) = Color.to_rgba c in
-      Cairo.set_source_rgba context (float_of_int r) (float_of_int g)
-                                    (float_of_int b) (float_of_int a);
+      Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
+                                    (ratio_of_int b) (ratio_of_int a);
       Cairo.rectangle context ~x:x ~y:y ~w:w ~h:h;
       if fill then Cairo.fill_preserve context;(* 塗りつぶす場合 *)
       draw_outline context outline_size
   | POLYGON {color = c; x = x; y = y; points = lst;
              fill = fill; outline_size = outline_size} ->
       let (r, g, b, a) = Color.to_rgba c in
-      Cairo.set_source_rgba context (float_of_int r) (float_of_int g)
-                                    (float_of_int b) (float_of_int a);
+      Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
+                                    (ratio_of_int b) (ratio_of_int a);
       Cairo.move_to context x y;
       draw_line lst context;
       Cairo.Path.close context; (* 最初と最後の点を結ぶ *)
@@ -232,15 +234,15 @@ let rec draw context image = match image with
             fill = fill; outline_size = outline_size} ->
       let pi2 = 8. *. atan 1. in
       let (r, g, b, a) = Color.to_rgba c in
-      Cairo.set_source_rgba context (float_of_int r) (float_of_int g)
-                                    (float_of_int b) (float_of_int a);
+      Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
+                                    (ratio_of_int b) (ratio_of_int a);
       Cairo.arc context ~x:x ~y:y ~r:radius ~a1:0. ~a2:pi2;
       if fill then Cairo.fill_preserve context;(* 塗りつぶす場合 *)
       draw_outline context outline_size
   | LINE {color = c; size = s; x = x; y = y; points = lst} ->
       let (r, g, b, a) = Color.to_rgba c in
-      Cairo.set_source_rgba context (float_of_int r) (float_of_int g)
-                                    (float_of_int b) (float_of_int a);
+      Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
+                                    (ratio_of_int b) (ratio_of_int a);
       Cairo.set_line_width context s;
       Cairo.move_to context x y;
       draw_line lst context;
@@ -249,8 +251,8 @@ let rec draw context image = match image with
       Cairo.stroke context
   | TEXT {color = c; text = t; x = x; y = y; size = s} ->
       let (r, g, b, a) = Color.to_rgba c in
-      Cairo.set_source_rgba context (float_of_int r) (float_of_int g)
-                                    (float_of_int b) (float_of_int a);
+      Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
+                                    (ratio_of_int b) (ratio_of_int a);
       Cairo.set_font_size context s;
       Cairo.move_to context x y;
       Cairo.show_text context t;
