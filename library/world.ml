@@ -9,11 +9,33 @@ let remove_watch () = match !wid_ref with
   | Some (wid) -> wid_ref := None; GMain.Io.remove wid
 
 (* 引数から IP, ポート番号を得る *)
-(* でも単独ゲームの場合、引数を別用途に使いたいかも *)
-let obtain_addrinfo () = match Array.length Sys.argv with
-    2 -> Some ("localhost", Sys.argv.(1))
-  | 3 -> Some (Sys.argv.(1), Sys.argv.(2))
-  | _ -> None
+let ip_port_pair = ref None
+let set_ip ip = match !ip_port_pair with
+    None ->
+      ip_port_pair := Some (ip, "")
+  | Some (_, port) ->
+      ip_port_pair := Some (ip, port)
+let set_port port = match !ip_port_pair with
+    None ->
+      ip_port_pair := Some ("localhost", port)
+  | Some (ip, _) ->
+      ip_port_pair := Some (ip, port)
+
+let speclist = [
+  ("-ip", Arg.String set_ip,
+   "server's hostname or IP (for communicating clients only)");
+  ("-port", Arg.String set_port,
+   "server's port number (for communicating clients only)");
+]
+
+let rev_argv_list = ref [Sys.argv.(0)]
+let anon_fun arg = rev_argv_list := arg :: !rev_argv_list
+
+let usage_msg = "Usage: " ^ Sys.argv.(0) ^
+                " [[-ip hostname] -port port-number] args ..."
+
+let () = Arg.parse speclist anon_fun usage_msg
+let argv = Array.of_list (List.rev !rev_argv_list)
 
 (* 'a は world の型、'b は mail の型 *)
 type ('a, 'b) t =
@@ -290,7 +312,7 @@ let big_bang ?(name="My Game")
   (*まずサーバーに登録*)
   (*クライアントのソケットとサーバのソケットの接続*)
   let register' = match register with
-    None -> obtain_addrinfo ()
+    None -> !ip_port_pair
   | Some (_, _) -> register
   in
   (* ここの match 文の連続はもう少しきれいにならないかと思うが... *)
