@@ -16,7 +16,7 @@ type ('a, 'b) t =
 let rec sendmail lst1 = match lst1 with
     [] -> ()
   | (first1, first2) :: rest -> begin
-      if List.mem_assoc first1 !clientlst then 
+      if List.mem_assoc first1 !clientlst then
         Socket.send (Some first2) first1;
       (* メッセージfirst2を送り先first1に送る *)
       sendmail rest
@@ -62,7 +62,7 @@ let universe ?(on_new=initial_new)
   (* client_sockfdをもらったらそれを通信からはずす *)
   (* client_sockfdをcloseする. *)
   let cut_communication client_sockfd =
-    if List.mem_assoc client_sockfd !clientlst then 
+    if List.mem_assoc client_sockfd !clientlst then
       begin
         clientlst := List.remove_assoc client_sockfd !clientlst;
         Socket.close client_sockfd;
@@ -76,7 +76,7 @@ let universe ?(on_new=initial_new)
   (* 状態を更新し、メールを送る。ここが唯一の state を変更する場所 *)
   (* iworldlstは通信から外したいクライアントのリスト。これが空でないとループ *)
   let rec update_and_send result =
-    match result with 
+    match result with
       State newstate ->state := newstate (* stateを変更 *)
     | Bundle (newstate, maillst, iworldlst) ->
        state := newstate; (* stateを変更 *)
@@ -87,7 +87,7 @@ let universe ?(on_new=initial_new)
                             (* add_watchの登録を解除. *)
                             (* firstが解除されて、かつすべてのクライアントがいなくなったら、状態リセット *)
                             if cut_communication first
-                            then 
+                            then
                               state := initial_state
                             else
                               update_and_send (Bundle (!state, maillst, rest))
@@ -97,25 +97,25 @@ let universe ?(on_new=initial_new)
 
   (* makemail : メッセージが来ているクライアントを見てメッセージを受信して
      bundle を作りそれに従いメッセージを送る *)
-  let makemail client_sockfd = 
-    if (List.mem_assoc client_sockfd !clientlst) 
+  let makemail client_sockfd =
+    if (List.mem_assoc client_sockfd !clientlst)
     (* client_sockfd が通信に参加していることを確かめる *)
-    then 
-      let result = 
-        let message = 
+    then
+      let result =
+        let message =
           try Socket.receive client_sockfd with _ -> None in
         (* 通信が切れていたらNoneが、そうでなければSome messageが返ってくる *)
         (* メッセージを送ってサーバが読む前にクライアントがcloseしたらエラー *)
         (* その場合はNoneが来たと考える *)
-        match message with 
-          None -> on_disconnect !state client_sockfd 
-         |Some m -> on_msg !state client_sockfd m   
+        match message with
+          None -> on_disconnect !state client_sockfd
+         |Some m -> on_msg !state client_sockfd m
       in update_and_send result;
 
   in
 
   (* 送られてきたデータの受信 *)
-  let msg_event _ = 
+  let msg_event _ =
     let readlst = Socket.select_read (fst (List.split !clientlst)) in
     (* メッセージが来ていたfile_descrのリスト *)
     List.iter makemail readlst;

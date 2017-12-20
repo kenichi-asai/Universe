@@ -118,7 +118,7 @@ let circle r ?(fill = true) ?(outline_size = 0.) c =
 
 (* line : (float * float) list -> ?size:float -> Color.t -> Image.t *)
 let line lst ?(size = 0.5) c =
-  let movexy = move_xy lst in 
+  let movexy = move_xy lst in
   (* x と y それぞれの最小値が負の時のみ座標を動かす *)
   (* line の左下を画像の (0, 0) にするため *)
   LINE {color = c; size = size; x = 0. -. fst movexy; y = 0. -. snd movexy;
@@ -127,7 +127,7 @@ let line lst ?(size = 0.5) c =
 (* polygon : (float * float) list ->
              ?fill:bool -> ?outline_size:float -> Color.t -> Image.t *)
 let polygon lst ?(fill = true) ?(outline_size = 0.) c =
-  let movexy = move_xy lst in 
+  let movexy = move_xy lst in
   (* x と y それぞれの最小値が負の時のみ座標を動かす *)
   (* line の左下を画像の (0, 0) にするため *)
   POLYGON {color = c; x = 0. -. fst movexy; y = 0. -. snd movexy;

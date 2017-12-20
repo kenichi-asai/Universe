@@ -1,4 +1,4 @@
-(**     World module 
+(**     World module
     @ja World モジュール
     @see <http://docs.racket-lang.org/teachpack/2htdpuniverse.html> Racket Documentation *)
 

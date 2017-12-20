@@ -1,5 +1,5 @@
 SOURCES = universe.mli universe.ml
-PACKS = lablgtk2.gnomecanvas 
+PACKS = lablgtk2.gnomecanvas
 RESULT = universe
 OCAMLMAKEFILE = ../OCamlMakefile
 include $(OCAMLMAKEFILE)

@@ -1,4 +1,4 @@
-(**     Universe module 
+(**     Universe module
     @ja Universe モジュール
     @see <http://docs.racket-lang.org/teachpack/2htdpuniverse.html> Racket Documentation *)
 
@@ -7,7 +7,7 @@
 type iworld_t
 
 type ('a, 'b) t =
-    State of 'a (**     ['a] is the type of states 
+    State of 'a (**     ['a] is the type of states
                     @ja 状態の型が ['a] *)
   | Bundle of 'a * (iworld_t * 'b) list * iworld_t list
         (**     ['a] is the type of states,

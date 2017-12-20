@@ -64,8 +64,8 @@ let big_bang ?(name="My Game")
   (* draw の初期値 *)
   (* width, height が必要なので big_bang の外では定義できない *)
   (* initial_draw : 'a -> Image.t *)
-  let initial_draw w = Image.empty_scene (float_of_int width) 
-					 (float_of_int height) in
+  let initial_draw w = Image.empty_scene (float_of_int width)
+                                         (float_of_int height) in
 
   (* draw : 'a -> Image.t *)
   let draw = match to_draw with
@@ -104,7 +104,7 @@ let big_bang ?(name="My Game")
                               ~width:width
                               ~height:height
                               () in
-  
+
   (* 世界 *)
   let world = ref initial_world in
 
@@ -120,14 +120,14 @@ let big_bang ?(name="My Game")
   let draw_window draw =
     begin
       clear window;
-      let drawing_area = 
-	GMisc.drawing_area ~width:width ~height:height ~packing:window#add () in
-      let expose drawingarea ev = 
-	let context = Cairo_gtk.create drawingarea#misc#window in 
-	begin
-	  Image.draw context (draw !world);
-	  true 
-	end in
+      let drawing_area =
+        GMisc.drawing_area ~width:width ~height:height ~packing:window#add () in
+      let expose drawingarea ev =
+        let context = Cairo_gtk.create drawingarea#misc#window in
+        begin
+          Image.draw context (draw !world);
+          true
+        end in
       ignore(drawing_area#event#connect#expose (expose drawing_area));
       window#show ()
     end
@@ -203,9 +203,9 @@ let big_bang ?(name="My Game")
       | GdkKeysyms._Return -> "\r"
       | GdkKeysyms._Tab -> "\t"
       | GdkKeysyms._BackSpace -> "\b"
-      
+
       | GdkKyesyms. -> ""
-       
+
       | _ -> GdkEvent.Key.string ev
              *)
     in
@@ -227,7 +227,7 @@ let big_bang ?(name="My Game")
   (* ウィンドウのクローズボックスを押したときの処理 *)
   let delete_event ev =
     if !running then begin
-      running := false; 
+      running := false;
       remove_watch ();
       try
         Socket.send None server_sockfd;
@@ -241,23 +241,23 @@ let big_bang ?(name="My Game")
     GMain.Main.quit ();
     false
   in
-  
+
 
 
   (* メッセージを受け取ったときの処理 *)
   (* もしrunningがfalseならserver_sockfdは通信から抜けている *)
-  let receive_event _ = 
-   if !running then 
+  let receive_event _ =
+   if !running then
       begin
         let message = try Socket.receive server_sockfd with _ -> None in
         (* クライアントがメッセージを読む前にサーバがcloseしたらエラー *)
         (* その場合Noneが渡されたものとみなす*)
-        match message with 
+        match message with
           Some message ->
           let result = on_receive !world message in
           (* メッセージを読んでon_receive !world (メッセージ)した結果 *)
-          update_and_draw result; 
-          true 
+          update_and_draw result;
+          true
          |_->
            begin
              (try (
@@ -269,11 +269,11 @@ let big_bang ?(name="My Game")
              with _ -> ());
                (* もしmessageがtry文のせいでNoneになった時にcloseが二回起きる *)
                        false
-           end 
-      end else 
+           end
+      end else
       false
   in
- 
+
   (* big_bang のメイン *)
 
   window#event#add [`BUTTON_PRESS; `BUTTON_RELEASE; `KEY_PRESS; `KEY_RELEASE];
@@ -294,9 +294,9 @@ let big_bang ?(name="My Game")
   | Some (_, _) -> register
   in
   (* ここの match 文の連続はもう少しきれいにならないかと思うが... *)
-  begin match register' with 
+  begin match register' with
     None -> ()
-  | Some (ipaddress, portnumber) -> 
+  | Some (ipaddress, portnumber) ->
       Socket.connect (ipaddress, portnumber) server_sockfd;
       (*ignore (GMain.Io.add_watch ~cond:[`IN]
                                  ~callback:receive_event

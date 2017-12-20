@@ -11,17 +11,17 @@ let send message sockfd =
 (* もし送り先が通信から抜けていたら何もしない *)
 
 (* in_channelに対応するsockfdからmessageを受け取って返す *)
-let receive sockfd = 
-  let in_channel = Unix.in_channel_of_descr sockfd in  
+let receive sockfd =
+  let in_channel = Unix.in_channel_of_descr sockfd in
   let message = Marshal.from_channel in_channel in
   message
 
 (* sockfdにたまっている未処理のデータを破棄 *)
-let rec tcflush sockfd = 
+let rec tcflush sockfd =
   try begin
       Unix.set_nonblock sockfd;
       Unix.tcflush sockfd Unix.TCIOFLUSH;
-      tcflush sockfd 
+      tcflush sockfd
     end
   with _ -> ()
 
@@ -68,7 +68,7 @@ let portnum server_sockfd =
 (* universe で使うものここまで *)
 
 (* world で使うもの *)
-   
+
 let rec try_connection sock_addr_list client_sockfd = match sock_addr_list with
     [] -> failwith "No available connection"
   | {Unix.ai_addr = sock_addr; Unix.ai_canonname = name} :: rest ->
