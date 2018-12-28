@@ -4,6 +4,8 @@ SOCKET = socket
 WORLD = world
 UNIVERSE = universe
 
+export THREADS = y
+
 all : bcl
 
 bcl :
