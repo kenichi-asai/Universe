@@ -81,7 +81,7 @@ let rec get_min lst (minx, miny) = match lst with
 (* テキストとサイズを受け取ったら画像の横と縦の組を返す *)
 (* text_wh : string -> float -> (int * int) *)
 let text_wh str size =
-  let surface = Cairo.Image.create Cairo.Image.ARGB32 ~width:0 ~height:0 in
+  let surface = Cairo.Image.create Cairo.Image.ARGB32 ~w:0 ~h:0 in
   let context = Cairo.create surface in
   begin
     Cairo.set_font_size context size;
@@ -204,7 +204,7 @@ let draw_outline context outline_size =
 let rec draw_line plst context = match plst with
     [] -> ()
   | (x, y) :: rest ->
-      Cairo.rel_line_to context ~x:x ~y:y;
+      Cairo.rel_line_to context x y;
       draw_line rest context
 
 let ratio_of_int x = float_of_int x /. 255.
@@ -217,7 +217,7 @@ let rec draw context image = match image with
       let (r, g, b, a) = Color.to_rgba c in
       Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
                                     (ratio_of_int b) (ratio_of_int a);
-      Cairo.rectangle context ~x:x ~y:y ~w:w ~h:h;
+      Cairo.rectangle context x y ~w:w ~h:h;
       if fill then Cairo.fill_preserve context;(* 塗りつぶす場合 *)
       draw_outline context outline_size
   | POLYGON {color = c; x = x; y = y; points = lst;
@@ -236,7 +236,7 @@ let rec draw context image = match image with
       let (r, g, b, a) = Color.to_rgba c in
       Cairo.set_source_rgba context (ratio_of_int r) (ratio_of_int g)
                                     (ratio_of_int b) (ratio_of_int a);
-      Cairo.arc context ~x:x ~y:y ~r:radius ~a1:0. ~a2:pi2;
+      Cairo.arc context x y ~r:radius ~a1:0. ~a2:pi2;
       if fill then Cairo.fill_preserve context;(* 塗りつぶす場合 *)
       draw_outline context outline_size
   | LINE {color = c; size = s; x = x; y = y; points = lst} ->
@@ -366,8 +366,8 @@ let image_to_surface image =
   let maxx = fst (snd corners) in
   let maxy = snd (snd corners) in
   let surface = Cairo.Image.create Cairo.Image.ARGB32
-                                   ~width:(int_of_float (maxx -. minx))
-                                   ~height:(int_of_float (maxy -. miny)) in
+                                   ~w:(int_of_float (maxx -. minx))
+                                   ~h:(int_of_float (maxy -. miny)) in
   let context = Cairo.create surface in
   let move_distance = snd (fst corners) in
   (* 左下の座標が line のものだとこれに0.以外の値が入る*)

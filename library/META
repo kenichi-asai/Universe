@@ -8,7 +8,7 @@ exists_if = "universe.cma"
 package "color" (
   version = "0.0"
   description = "Color subpackage for Universe library"
-  requires = "lablgtk2.gnomecanvas"
+  requires = "lablgtk2"
   archive(byte) = "color.cma"
   archive(native) = "color.cmxa"
   exists_if = "color.cma"
@@ -17,7 +17,7 @@ package "color" (
 package "image" (
   version = "0.0"
   description = "Image subpackage for Universe library"
-  requires = "cairo2.lablgtk2 lablgtk2.gnomecanvas"
+  requires = "cairo2-gtk"
   archive(byte) = "image.cma"
   archive(native) = "image.cmxa"
   exists_if = "image.cma"
@@ -35,7 +35,7 @@ package "socket" (
 package "world" (
   version = "0.0"
   description = "World subpackage for Universe library"
-  requires = "cairo2.lablgtk2 lablgtk2.gnomecanvas"
+  requires = "cairo2-gtk"
   archive(byte) = "world.cma"
   archive(native) = "world.cmxa"
   exists_if = "world.cma"

@@ -1,5 +1,5 @@
 SOURCES = world.mli world.ml
-PACKS = cairo2.lablgtk2 lablgtk2.gnomecanvas
+PACKS = cairo2-gtk
 RESULT = world
 OCAMLMAKEFILE = ../OCamlMakefile
 include $(OCAMLMAKEFILE)

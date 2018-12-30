@@ -15,3 +15,7 @@
 ._*
 \#*#
 .#*
+OCamlMakefile
+sample/ball-game1/game
+sample/ball-game2/client
+sample/ball-game2/server
