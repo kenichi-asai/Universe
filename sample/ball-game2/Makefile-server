@@ -1,6 +1,6 @@
 SOURCES = const.ml ball.ml server.ml
 PACKS = universe
-#PACKS = cairo2.lablgtk2 lablgtk2.gnomecanvas unix
+#PACKS = cairo2-gtk unix
 #INCDIRS = ../../library
 #LIBS = socket color image universe
 RESULT = server
